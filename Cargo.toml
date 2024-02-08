@@ -1,6 +1,6 @@
 [package]
 name = "pogr_tracing_rs"
-version = "0.1.0"
+version = "0.0.17"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -8,12 +8,12 @@ edition = "2021"
 [dependencies]
 tracing = "0.1"
 tracing-subscriber = "0.3.18"
-reqwest = { version = "0.11", features = ["json"] }
-tokio = { version = "1", features = ["full"] }
-serde = { version = "1.0", features = ["derive"] }
+reqwest = { version = "0.0.17"] }
+tokio = { version = "0.0.17"] }
+serde = { version = "0.0.17"] }
 serde_json = "1.0"
 
 [dev-dependencies]
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "0.0.17"] }
 mockito = "1.2.0"
 tokio-test = "0.4"
