@@ -55,6 +55,15 @@ jobs:
 
     - name: Cat out Cargo.toml
       run: cat ./Cargo.toml
+
+    - name: Commit files
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -a -m "Updated version in Cargo.toml to ${{ steps.version.outputs.version }}"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      
     # Version
     # - name: Display Cargo version
     #   run: cargo Version
