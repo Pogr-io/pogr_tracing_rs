@@ -168,7 +168,7 @@ impl Visit for JsonVisitor {
     }
 }
 
-/// Represents an appender for logging to the POGR (Placeholder for the actual service name) platform.
+/// Represents an appender for logging to the POGR platform.
 ///
 /// This struct encapsulates the necessary details and client for sending log messages
 /// to a specific logging service. It includes configuration like service name, environment,
