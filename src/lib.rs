@@ -76,7 +76,7 @@ impl JsonVisitor {
     /// # Examples
     ///
     /// ```
-    /// use your_crate::JsonVisitor;
+    /// use pogr_tracing_rs::JsonVisitor;
     ///
     /// let visitor = JsonVisitor::new();
     ///
@@ -422,7 +422,7 @@ impl PogrAppender {
 ///
 /// ```rust,no_run
 /// use tracing_subscriber::{Registry, layer::SubscriberExt};
-/// use your_crate::{PogrLayer, PogrAppender};
+/// use pogr_tracing_rs::{PogrLayer, PogrAppender};
 /// use std::sync::Arc;
 /// use tokio::sync::Mutex;
 ///
