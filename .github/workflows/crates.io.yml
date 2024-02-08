@@ -49,9 +49,9 @@ jobs:
         DEBUG_OUTPUT: ${{ needs.version.outputs.version }}
 
     - name: Set version inside of Cargo.toml
-      run: sed -i 's/version = ".*"/version = "$VERSION"/' ./Cargo.toml
+      run: sed -i "s/version = \".*\"/version = \"${VERSION}\"/" ./Cargo.toml
       env:
-        VERSION: ${{ needs.version.outputs.version }}
+        VERSION: ${{ steps.version.outputs.version }}
 
     - name: Cat out Cargo.toml
       run: cat ./Cargo.toml
