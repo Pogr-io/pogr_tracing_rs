@@ -1,0 +1,35 @@
+name: Generic CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:  
+  check-for-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      is_tag: ${{ steps.tag-checker.outputs.is_tag }}
+    steps:
+    - id: tag-checker
+      name: Check if push is for a tag
+      run: echo "::set-output name=is_tag::${{ startsWith(github.ref, 'refs/tags/') }}"
+
+  rust_tests:
+    name: Rust CI
+    uses: ./.github/workflows/rust.yml
+    secrets: inherit
+
+  crates_io:
+    name: Crate.io Publishing
+    if: needs.check-for-tag.outputs.is_tag == 'true'
+    needs: [rust_tests]
+    uses: ./.github/workflows/crates.io.yaml
+    secrets: inherit

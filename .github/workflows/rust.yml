@@ -1,18 +1,15 @@
-name: Rust Crate CI
+name: Rust CI
 
-on:
-  push:
-    branches: [ master, main ]
-  pull_request:
-    branches: [ master, main ]
+on: [workflow_call]
 
 jobs:
   build-and-test:
     name: Build and Test
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: ['ubuntu-latest', 'windows-latest']
         rust-version: ['1.70.0', '1.71.0', '1.72.0', '1.73.0', '1.74.0', '1.75.0', '1.76.0']
 
     steps:
@@ -39,10 +36,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-cargo-
 
+    # Version
+    - name: Display Cargo version
+      run: cargo version
+
     # Build
-    - name: Build
+    - name: Rust Build(cargo build)
       run: cargo build --verbose
 
     # Test
-    - name: Run tests
+    - name: Run Tests(cargo test)
       run: cargo test --verbose

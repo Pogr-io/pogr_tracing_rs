@@ -1,0 +1,58 @@
+name: Rust CI
+
+on: [workflow_call]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out repository code
+      with:
+        fetch-depth: 0
+
+    # Setup Rust toolchain
+    - uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: '1.73.0'
+        override: true
+
+    # Cache dependencies
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+          
+    - name: Application Version
+      id: version
+      uses: paulhatch/semantic-version@v5.3.0
+      with:
+        change_path: src tests
+        debug: true
+
+    - name: Print Diagnostic Output
+      run: echo $DEBUG_OUTPUT
+      env:
+        DEBUG_OUTPUT: ${{ steps.run.outputs.debug_output }}
+    # Version
+    # - name: Display Cargo version
+    #   run: cargo Version
+    
+    # - name: Publish to Crate.io
+    #   run: cargo login --token ${{ secrets.CRATES_IO_TOKEN }}
+    
+    # - name: Publish to Crate.io
+    #   run: cargo publish --dry-run
+    
+    # - name: Publish to Crate.io
+    #   run: cargo publish
