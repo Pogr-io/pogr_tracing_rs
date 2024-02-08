@@ -1,0 +1,48 @@
+name: Rust Crate CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        rust-version: ['1.73.0', '1.74.0', '1.75.0', '1.76.0', '1.77.0']
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out repository code
+
+    # Setup Rust toolchain
+    - uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: ${{ matrix.rust-version }}
+        override: true
+
+    # Cache dependencies
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+
+    # Build
+    - name: Build
+      run: cargo build --verbose
+
+    # Test
+    - name: Run tests
+      run: cargo test --verbose
