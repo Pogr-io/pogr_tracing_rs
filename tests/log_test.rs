@@ -16,6 +16,8 @@ async fn test_pogr_appender_log() {
     });
     
     let _m_success = mock_server.mock("POST", "/v1/intake/logs")
+        .match_header("INTAKE_SESSION_ID", "test_session_id")
+        .match_header("Content-Type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(log_response_success.to_string())
@@ -24,6 +26,9 @@ async fn test_pogr_appender_log() {
     // Initialize PogrAppender with mocked endpoints
     let appender = PogrAppender {
         client: reqwest::Client::new(),
+        service_name: "test_pogr_appender_log".to_string(),
+        environment: "testing".to_string(),
+        service_type: "test".to_string(),
         session_id: "test_session_id".to_string(),
         logs_endpoint: logs_endpoint.clone(),
         init_endpoint: "".to_string(),

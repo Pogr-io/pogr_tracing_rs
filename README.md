@@ -20,7 +20,25 @@ Before you begin, ensure you have the following installed:
 
 - Rust programming language (latest stable version recommended).
 - `tokio` runtime for asynchronous support.
-- Access to the POGR platform with valid `POGR_CLIENT` and `POGR_BUILD` environment variables set.
+- Access to the POGR platform with valid `POGR_ACCESS` and `POGR_SECRET` environment variables set.
+
+## Environment Variables
+
+### Required Variables
+
+- **`POGR_ACCESS`**: This is a required environment variable that specifies the access key used to authenticate with the POGR platform. It's essential for establishing a secure connection between your application and the POGR services, ensuring that your logs are transmitted securely and are only accessible by authorized users.
+
+- **`POGR_SECRET`**: This required variable is the secret key corresponding to your `POGR_ACCESS` key. It is used in conjunction with the access key to authenticate requests to the POGR platform. The secret key should be kept confidential to prevent unauthorized access to your logging data.
+
+### Optional Variables
+
+- **`SERVICE_NAME`**: This optional variable allows you to specify the name of the service that is sending logs to the POGR platform. If not set, the crate will attempt to use the name of the current executable as the service name. Specifying a service name is useful for identifying and filtering logs from different services within the same project or infrastructure.
+
+- **`ENVIRONMENT`**: The `ENVIRONMENT` variable lets you specify the deployment environment of your application, such as `development`, `testing`, `staging`, or `production`. This information is included in the logs and can be used to differentiate logs from the same service running in different environments.
+
+- **`SERVICE_TYPE`**: With this variable, you can define the type of service that's generating the logs, such as `web`, `database`, `cache`, etc. This categorization helps in organizing and filtering logs based on the service type, providing clearer insights into the behavior and issues of different components of your system.
+
+- **`POGR_INIT_ENDPOINT`** and **`POGR_LOGS_ENDPOINT`**: These optional variables allow for customization of the endpoints to which initialization and log data are sent, respectively. By default, the crate uses the POGR platform's standard endpoints, but you can override them with these variables if you need to direct requests to a different address (e.g., a proxy or a testing environment).
 
 ## Installation
 

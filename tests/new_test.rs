@@ -5,8 +5,8 @@ use pogr_tracing_rs::PogrAppender;
 async fn test_pogr_appender_new() {
 
     // Setup mock environment variables
-    std::env::set_var("POGR_CLIENT", "test_client");
-    std::env::set_var("POGR_BUILD", "test_build");
+    std::env::set_var("POGR_ACCESS", "test_access_key");
+    std::env::set_var("POGR_SECRET", "test_secret_key");
     
 
     // Mock init endpoint
@@ -20,6 +20,9 @@ async fn test_pogr_appender_new() {
         }
     });
     let _m = mock_server.mock("POST", "/v1/intake/init")
+        .match_header("POGR_ACCESS", "test_access_key")
+        .match_header("POGR_SECRET", "test_secret_key")
+        .match_header("Content-Type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(init_response.to_string())

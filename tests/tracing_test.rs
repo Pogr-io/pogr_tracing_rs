@@ -10,8 +10,8 @@ use std::sync::Arc;
 async fn test_pogr_tracing_appender() {
 
     // Setup mock environment variables
-    std::env::set_var("POGR_CLIENT", "test_client");
-    std::env::set_var("POGR_BUILD", "test_build");
+    std::env::set_var("POGR_ACCESS", "test_access_key");
+    std::env::set_var("POGR_SECRET", "test_secret_key");
     
 
     // Mock init endpoint
@@ -25,6 +25,9 @@ async fn test_pogr_tracing_appender() {
         }
     });
     let _m = mock_server.mock("POST", "/v1/intake/init")
+        .match_header("POGR_ACCESS", "test_access_key")
+        .match_header("POGR_SECRET", "test_secret_key")
+        .match_header("Content-Type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(init_response.to_string())
@@ -38,6 +41,8 @@ async fn test_pogr_tracing_appender() {
     });
     
     let _m_success = mock_server.mock("POST", "/v1/intake/logs")
+        .match_header("INTAKE_SESSION_ID", "test_session_id")
+        .match_header("Content-Type", "application/json")
         .with_status(200)
         .with_header("content-type", "application/json")
         .with_body(log_response_success.to_string())

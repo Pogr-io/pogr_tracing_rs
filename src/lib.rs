@@ -6,15 +6,12 @@ use tracing_subscriber::{layer::Context, Layer, registry::LookupSpan};
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use reqwest::Client;
-use std::env;
+use std::{env, fmt};
 use tracing::field::{Field, Visit};
-use std::fmt;
 use std::collections::HashMap;
-use serde_json::json;
 use tracing::Metadata;
-use serde_json::to_value;
+use serde_json::{json, to_value, Value};
 
 struct JsonVisitor {
     fields: HashMap<String, Value>,
@@ -38,7 +35,6 @@ impl Visit for JsonVisitor {
     }
 
     fn record_f64(&mut self, field: &Field, value: f64) {
-        // Note: JSON representation of floating-point numbers can be lossy.
         self.fields.insert(field.name().to_string(), json!(value));
     }
 
@@ -51,14 +47,11 @@ impl Visit for JsonVisitor {
     }
 
     fn record_error(&mut self, field: &Field, value: &(dyn std::error::Error + 'static)) {
-        // Directly capture the error message without downcasting
         self.fields.insert(field.name().to_string(), json!(value.to_string()));
     }
     
 
-    // Custom method to record debug information
     fn record_debug(&mut self, field: &Field, value: &(dyn fmt::Debug)) {
-        // Use Debug trait to convert value to a string representation
         self.fields.insert(field.name().to_string(), json!(format!("{:?}", value)));
     }
 
@@ -66,21 +59,24 @@ impl Visit for JsonVisitor {
 
 pub struct PogrAppender {
     pub client: Client,
+    pub service_name: String,
+    pub environment: String,
+    pub service_type: String,
     pub session_id: String,
     pub logs_endpoint: String,
-    pub init_endpoint: String
+    pub init_endpoint: String,
 }
 
 #[derive(Serialize)]
 struct InitRequest {}
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 struct InitResponse {
     success: bool,
     payload: InitPayload,
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 struct InitPayload {
     session_id: String,
 }
@@ -96,13 +92,13 @@ pub struct LogRequest {
     pub tags: serde_json::Value,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 struct LogResponse {
     success: bool,
     payload: LogPayload,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 struct LogPayload {
     log_id: String,
 }
@@ -128,22 +124,23 @@ impl PogrAppender {
     pub async fn new(init_endpoint: Option<String>, logs_endpoint: Option<String>) -> Self {
         let client = Client::new();
 
-        // Use environment variables for POGR_CLIENT and POGR_BUILD
-        let pogr_client = env::var("POGR_CLIENT").expect("POGR_CLIENT must be set");
-        let pogr_build = env::var("POGR_BUILD").expect("POGR_BUILD must be set");
+        let service_name = env::var("SERVICE_NAME").unwrap_or_else(|_| env::current_exe().unwrap().file_name().unwrap().to_str().unwrap().to_owned());
+        let environment = env::var("ENVIRONMENT").unwrap_or_else(|_| "development".to_owned());
+        let service_type = env::var("SERVICE_TYPE").unwrap_or_else(|_| "service".to_owned());
 
-        // Determine the endpoint URL based on the POGR_ENDPOINT environment variable
         let init_endpoint_url = init_endpoint
-        .or_else(|| env::var("POGR_INIT_ENDPOINT").ok())
-        .unwrap_or_else(|| "https://api.pogr.io/v1/intake/init".to_string());
+            .or_else(|| env::var("POGR_INIT_ENDPOINT").ok())
+            .unwrap_or_else(|| "https://api.pogr.io/v1/intake/init".to_string());
         let logs_endpoint_url = logs_endpoint
-        .or_else(|| env::var("POGR_LOGS_ENDPOINT").ok())
-        .unwrap_or_else(|| "https://api.pogr.io/v1/intake/logs".to_string());
+            .or_else(|| env::var("POGR_LOGS_ENDPOINT").ok())
+            .unwrap_or_else(|| "https://api.pogr.io/v1/intake/logs".to_string());
 
+        let pogr_client = env::var("POGR_ACCESS").expect("POGR_ACCESS must be set");
+        let pogr_build = env::var("POGR_SECRET").expect("POGR_SECRET must be set");
 
         let init_response: InitResponse = client.post(&init_endpoint_url)
-            .header("POGR_CLIENT", pogr_client)
-            .header("POGR_BUILD", pogr_build)
+            .header("POGR_ACCESS", pogr_client)
+            .header("POGR_SECRET", pogr_build)
             .header("Content-Type", "application/json")
             .send()
             .await
@@ -155,6 +152,9 @@ impl PogrAppender {
         if init_response.success {
             PogrAppender {
                 client,
+                service_name,
+                environment,
+                service_type,
                 session_id: init_response.payload.session_id,
                 logs_endpoint: logs_endpoint_url,
                 init_endpoint: init_endpoint_url,
@@ -197,22 +197,19 @@ where
         let mut visitor = JsonVisitor::new();
         event.record(&mut visitor);
 
-        // Convert the event to a LogRequest struct. This requires extracting the relevant information from `event`.
-        // For simplicity, this example does not show the conversion process. You'll need to implement it based on your LogRequest structure and what information you want to log.
+        tokio::spawn(async move {
+            let appender = appender.lock().await;
+            
+
         let log_request = LogRequest {
-            // Fill in the fields as necessary. This is an example and likely needs adjustment.
-            service: "YourServiceName".to_string(),
-            environment: "production".to_string(),
+            service: appender.service_name.clone(),
+            environment: appender.environment.clone(),
             severity: metadata.level().to_string(),
-            r#type: "api".to_string(),
+            r#type: appender.service_type.clone(),
             log: "rust tracing log captured".to_string(),
             data: serialize_metadata(metadata),
             tags: serde_json::to_value(visitor.fields).unwrap_or_else(|_| serde_json::json!({})),
         };
-
-        // Spawn a new task for sending the log message. This is necessary to avoid blocking the current thread.
-        tokio::spawn(async move {
-            let appender = appender.lock().await;
             appender.log(log_request).await;
         });
     }
