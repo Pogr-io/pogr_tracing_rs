@@ -41,7 +41,7 @@ jobs:
 
   crates_io:
     name: Crate.io Publishing
-    if: ${{ needs.check-for-tag.outputs.is_tag == 'true' }}
+    if: ${{ github.ref == 'refs/tags/*' }}
     needs: [rust_tests]
     uses: ./.github/workflows/crates.io.yml
     secrets: inherit
