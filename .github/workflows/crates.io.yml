@@ -49,9 +49,10 @@ jobs:
         DEBUG_OUTPUT: ${{ needs.version.outputs.version }}
 
     - name: Set version inside of Cargo.toml
-      run: sed -i "s/version = \".*\"/version = \"${VERSION}\"/" ./Cargo.toml
+      run: awk 'BEGIN {p=0} /^\[package\]/ {p=1} /^\[/ && !/^\[package\]/ {p=0} p==1 && /^version =/ {$0="version = \"" ENVIRON["VERSION"] "\""} {print}' Cargo.toml > Cargo.tmp && mv Cargo.tmp Cargo.toml
       env:
         VERSION: ${{ steps.version.outputs.version }}
+
 
     - name: Cat out Cargo.toml
       run: cat ./Cargo.toml
@@ -61,18 +62,19 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git commit -a -m "Updated version in Cargo.toml to ${{ steps.version.outputs.version }}"
+    
     - name: Push changes
       uses: ad-m/github-push-action@master
       
     # Version
-    # - name: Display Cargo version
-    #   run: cargo Version
+    - name: Display Cargo version
+      run: cargo Version
     
     # - name: Publish to Crate.io
     #   run: cargo login --token ${{ secrets.CRATES_IO_TOKEN }}
     
-    # - name: Publish to Crate.io
-    #   run: cargo publish --dry-run
+    - name: Publish to Crate.io
+      run: cargo publish --dry-run
     
     # - name: Publish to Crate.io
     #   run: cargo publish
