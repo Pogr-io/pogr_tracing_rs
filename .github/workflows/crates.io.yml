@@ -6,6 +6,9 @@ jobs:
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
+    permissions:                # Job-level permissions configuration starts here
+      contents: write           # 'write' access to repository contents
+      pull-requests: write      # 'write' access to pull requests
 
     steps:
     - uses: actions/checkout@v2
@@ -43,7 +46,15 @@ jobs:
     - name: Print Diagnostic Output
       run: echo $DEBUG_OUTPUT
       env:
-        DEBUG_OUTPUT: ${{ steps.run.outputs.debug_output }}
+        DEBUG_OUTPUT: ${{ needs.version.outputs.version }}
+
+    - name: Set version inside of Cargo.toml
+      run: sed -i 's/version = ".*"/version = "$VERSION"/' ./Cargo.toml
+      env:
+        VERSION: ${{ needs.version.outputs.version }}
+
+    - name: Cat out Cargo.toml
+      run: cat ./Cargo.toml
     # Version
     # - name: Display Cargo version
     #   run: cargo Version
