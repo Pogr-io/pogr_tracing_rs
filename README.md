@@ -18,7 +18,7 @@ This project is licensed under the MIT License.
 
 Before you begin, ensure you have the following installed:
 
-- Rust programming language (latest stable version recommended).
+- Rust programming language (utilizing 1.70.0 or higher).
 - `tokio` runtime for asynchronous support.
 - Access to the POGR platform with valid `POGR_ACCESS` and `POGR_SECRET` environment variables set.
 
