@@ -22,9 +22,9 @@ jobs:
         name: Check if push is for a tag
         run: |
           if [[ "${{ github.ref }}" == refs/tags/* ]]; then
-            echo "is_tag=1" >> $GITHUB_OUTPUT
+            echo "is_tag=true" >> $GITHUB_OUTPUT
           else
-            echo "is_tag=0" >> $GITHUB_OUTPUT
+            echo "is_tag=false" >> $GITHUB_OUTPUT
           fi
 
   test-tag-check:
@@ -41,7 +41,7 @@ jobs:
 
   crates_io:
     name: Crate.io Publishing
-    if: needs.check-for-tag.outputs.is_tag > 0
+    if: needs.check-for-tag.outputs.is_tag
     needs: [rust_tests]
     uses: ./.github/workflows/crates.io.yml
     secrets: inherit
