@@ -36,7 +36,7 @@
 //! 
 //! Then, in your application, set up the `PogrAppender` and `PogrLayer` with the `tracing` subscriber:
 //! 
-//! ```rust
+//! ```rust,no_run
 //! use pogr_tracing_rs::{PogrLayer, PogrAppender};
 //! use tracing_subscriber::{Registry, layer::SubscriberExt};
 //! use std::sync::Arc;
@@ -44,6 +44,7 @@
 //! 
 //! #[tokio::main]
 //! async fn main() {
+//! 
 //!     let appender = PogrAppender::new(None, None).await;
 //!     let layer = PogrLayer {
 //!         appender: Arc::new(Mutex::new(appender)),
