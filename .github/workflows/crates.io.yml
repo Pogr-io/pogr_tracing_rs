@@ -53,6 +53,11 @@ jobs:
       env:
         VERSION: ${{ steps.version.outputs.version }}
 
+    - name: Set version inside of Cargo.lock
+      run: awk 'BEGIN {p=0} /^\[package\]/ {p=1} /^\[/ && !/^\[package\]/ {p=0} p==1 && /^version =/ {$0="version = \"" ENVIRON["VERSION"] "\""} {print}' Cargo.lock > Cargo.tmp && mv Cargo.tmp Cargo.lock
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+
 
     - name: Cat out Cargo.toml
       run: cat ./Cargo.toml
