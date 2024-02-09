@@ -69,6 +69,10 @@ jobs:
     # Version
     - name: Display Cargo version
       run: cargo version
+
+    # Build
+    - name: Rust Build(cargo build)
+      run: cargo build --verbose
     
     - name: Login to Crate.io
       run: cargo login ${{ secrets.CARGO_REGISTRY_TOKEN }}
