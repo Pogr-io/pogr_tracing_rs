@@ -35,7 +35,7 @@ jobs:
         run: echo ${{ needs.check-for-tag.outputs.is_tag }}
 
   rust_tests:
-    name: Rust CI
+    name: Rust Testing/CI
     uses: ./.github/workflows/rust.yml
     secrets: inherit
 
