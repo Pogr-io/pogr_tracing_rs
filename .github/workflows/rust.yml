@@ -1,4 +1,4 @@
-name: Rust 1.70.x-1.76.x
+name: Rust 1.70.x-1.76.x  
 
 on: [workflow_call]
 
