@@ -68,7 +68,7 @@ jobs:
       
     # Version
     - name: Display Cargo version
-      run: cargo Version
+      run: cargo version
     
     # - name: Publish to Crate.io
     #   run: cargo login --token ${{ secrets.CRATES_IO_TOKEN }}
