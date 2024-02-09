@@ -31,7 +31,7 @@
 //! 
 //! ```toml
 //! [dependencies]
-//! pogr_tracing_rs = "0.1.0"
+//! pogr_tracing_rs = "0.0.34"
 //! ```
 //! 
 //! Then, in your application, set up the `PogrAppender` and `PogrLayer` with the `tracing` subscriber:
