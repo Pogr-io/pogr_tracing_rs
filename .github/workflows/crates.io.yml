@@ -58,6 +58,12 @@ jobs:
       env:
         VERSION: ${{ steps.version.outputs.version }}
 
+    - name: Update version in src/lib.rs
+      run: sed -i "s/\/\/! pogr_tracing_rs = \".*\"/\/\/! pogr_tracing_rs = \"${VERSION}\"/" src/lib.rs
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+
+
     - name: Cat out Cargo.toml
       run: cat ./Cargo.toml
 

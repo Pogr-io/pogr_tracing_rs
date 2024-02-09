@@ -1,3 +1,74 @@
+//! `pogr_tracing_rs` is a Rust crate designed to facilitate structured logging and tracing
+//! integration with the POGR analytics platform. This crate provides a set of tools that enable
+//! Rust applications to send their log data to the POGR service in a structured and efficient manner.
+//! 
+//! The main components of `pogr_tracing_rs` include:
+//! 
+//! - `JsonVisitor`: A utility for collecting and structuring log event fields into JSON format. It
+//!   allows for the serialization of log data into a format that is compatible with many logging
+//!   and analytics services, including POGR.
+//! 
+//! - `PogrAppender`: Responsible for sending log messages to the POGR platform. It handles the
+//!   construction and submission of log data, including session management and authentication
+//!   with the POGR API.
+//! 
+//! - `PogrLayer`: A tracing layer that integrates with the `tracing` ecosystem, capturing log
+//!   events, processing them with `JsonVisitor`, and forwarding them to the POGR service via
+//!   `PogrAppender`. This layer enables asynchronous log data submission, minimizing the impact
+//!   on application performance.
+//! 
+//! - Utility functions and structures for session initialization and log submission, ensuring
+//!   that log data is accurately represented and securely transmitted to the POGR service.
+//! 
+//! This crate is designed to be easy to integrate into existing Rust applications, requiring minimal
+//! configuration to connect to the POGR platform. It leverages the `tracing` crate for flexible and
+//! powerful instrumentation, making it suitable for applications ranging from simple CLI tools to
+//! complex web services.
+//! 
+//! # Getting Started
+//! 
+//! To use `pogr_tracing_rs`, add it as a dependency in your `Cargo.toml`:
+//! 
+//! ```toml
+//! [dependencies]
+//! pogr_tracing_rs = "0.1.0"
+//! ```
+//! 
+//! Then, in your application, set up the `PogrAppender` and `PogrLayer` with the `tracing` subscriber:
+//! 
+//! ```rust
+//! use pogr_tracing_rs::{PogrLayer, PogrAppender};
+//! use tracing_subscriber::{Registry, layer::SubscriberExt};
+//! use std::sync::Arc;
+//! use tokio::sync::Mutex;
+//! 
+//! #[tokio::main]
+//! async fn main() {
+//!     let appender = PogrAppender::new(None, None).await;
+//!     let layer = PogrLayer {
+//!         appender: Arc::new(Mutex::new(appender)),
+//!     };
+//! 
+//!     let subscriber = Registry::default().with(layer);
+//!     tracing::subscriber::set_global_default(subscriber)
+//!         .expect("Failed to set global subscriber");
+//! }
+//! ```
+//! 
+//! This will enable your application to automatically capture and send log data to the POGR
+//! analytics platform, leveraging Rust's async capabilities for efficient logging.
+//! 
+//! # Features
+//! 
+//! - Easy integration with the `tracing` ecosystem for Rust applications.
+//! - Structured logging with JSON serialization for compatibility with POGR and other logging services.
+//! - Asynchronous log data submission for performance optimization.
+//! - Flexible configuration to adapt to different environments and application requirements.
+//! 
+//! `pogr_tracing_rs` is an essential tool for Rust developers looking to enhance their application's
+//! logging capabilities with minimal overhead and maximum compatibility with modern logging platforms.
+
+
 #![allow(dead_code)]
 
 

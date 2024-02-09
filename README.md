@@ -25,7 +25,7 @@ Before you begin, ensure you have the following installed:
 
 - Rust programming language (utilizing 1.70.0 or higher).
 - `tokio` runtime for asynchronous support.
-- Access to the POGR platform with valid `POGR_ACCESS` and `POGR_SECRET` environment variables set.
+- Access to the POGR platform with valid `POGR_ACCESS` and `POGR_SECRET` environment variables set, obtainable from <https://pogr.io>
 
 ## How to obtain Developer Access
 
