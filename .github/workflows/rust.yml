@@ -1,4 +1,4 @@
-name: Rust 1.70-1.76  
+name: Rust 1.70-1.76 ___
 
 on: [workflow_call]
 
