@@ -53,6 +53,10 @@ jobs:
       env:
         VERSION: ${{ steps.version.outputs.version }}
 
+    - name: Update version in README.md
+      run: sed -i "s/pogr_tracing_rs = \".*\"/pogr_tracing_rs = \"${VERSION}\"/" README.md
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
 
     - name: Cat out Cargo.toml
       run: cat ./Cargo.toml
@@ -70,7 +74,6 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git commit -a -m "Updated version in Cargo.toml to ${{ steps.version.outputs.version }}"
-    
     
     - name: Login to Crate.io
       run: cargo login ${{ secrets.CARGO_REGISTRY_TOKEN }}
