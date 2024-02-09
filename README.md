@@ -49,7 +49,7 @@ Add `pogr_tracing_rs` to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-pogr_tracing_rs = "0.0.29"
+pogr_tracing_rs = "0.0.30"
 tracing = "0.1"
 tokio = { version = "1", features = ["full"] }
 reqwest = "0.11"
