@@ -935,7 +935,7 @@ dependencies = [
 
 [[package]]
 name = "pogr_tracing_rs"
-version = "0.0.23"
+version = "0.0.28"
 dependencies = [
  "criterion",
  "mockito",
