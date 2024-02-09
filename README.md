@@ -1,6 +1,6 @@
 # README for `pogr_tracing_rs`
 
-![Build Status](https://github.com/Pogr-io/pogr_tracing_rs/actions/workflows/rust.yml/badge.svg)![Crates.io](https://img.shields.io/crates/v/pogr_tracing_rs.svg)
+![Build Status](https://github.com/Pogr-io/pogr_tracing_rs/actions/workflows/rust.yml/badge.svg)  ![Crates.io](https://img.shields.io/crates/v/pogr_tracing_rs.svg)
 
 
 `pogr_tracing_rs` is a Rust crate designed to facilitate easy integration of the POGR Analytics Platform with applications written in Rust. This crate leverages the `tracing` ecosystem to collect and send structured log data to the POGR platform, offering a robust solution for monitoring and debugging Rust applications.
