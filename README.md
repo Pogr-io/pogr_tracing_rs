@@ -1,6 +1,8 @@
 # README for `pogr_tracing_rs`
 
-![Build Status](https://github.com/Pogr-io/pogr_tracing_rs/actions/workflows/rust.yml/badge.svg)  ![Crates.io](https://img.shields.io/crates/v/pogr_tracing_rs.svg)
+![Build Status](https://github.com/Pogr-io/pogr_tracing_rs/actions/workflows/rust.yml/badge.svg)  ![Crates.io Version](https://img.shields.io/crates/v/pogr_tracing_rs)
+![Crates.io Total Downloads](https://img.shields.io/crates/d/pogr_tracing_rs) ![Crates.io MSRV](https://img.shields.io/crates/msrv/pogr_tracing_rs)
+
 
 
 `pogr_tracing_rs` is a Rust crate designed to facilitate easy integration of the POGR Analytics Platform with applications written in Rust. This crate leverages the `tracing` ecosystem to collect and send structured log data to the POGR platform, offering a robust solution for monitoring and debugging Rust applications.
@@ -24,6 +26,10 @@ Before you begin, ensure you have the following installed:
 - Rust programming language (utilizing 1.70.0 or higher).
 - `tokio` runtime for asynchronous support.
 - Access to the POGR platform with valid `POGR_ACCESS` and `POGR_SECRET` environment variables set.
+
+## How to obtain Developer Access
+
+To activate a POGR developer account during our alpha phase, please request a developer key from your POGR representative, <info@pogr.io> , our discord: <https://discord.gg/ymjPaWg4mU> , Twitter: <https://twitter.com/pogr_io> or Instagram: <https://www.instagram.com/pogr/> . Use this either on the homepage or in the settings.
 
 ## Environment Variables
 
