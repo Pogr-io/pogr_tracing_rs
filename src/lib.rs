@@ -66,6 +66,12 @@
 //! - Asynchronous log data submission for performance optimization.
 //! - Flexible configuration to adapt to different environments and application requirements.
 //! 
+//! ## How to Obtain Developer Access
+//! 
+//! To activate a POGR developer account during our alpha phase, please request a developer key from your POGR representative, 
+//! <info@pogr.io>, our Discord: <https://discord.gg/ymjPaWg4mU>, Twitter: <https://twitter.com/pogr_io>, or Instagram: <https://www.instagram.com/pogr/>. 
+//! Use this either on the homepage or in the settings. Additionally, sign up for developer access on <https://pogr.io>.
+//! 
 //! `pogr_tracing_rs` is an essential tool for Rust developers looking to enhance their application's
 //! logging capabilities with minimal overhead and maximum compatibility with modern logging platforms.
 
