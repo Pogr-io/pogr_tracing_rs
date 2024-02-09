@@ -2,6 +2,20 @@
 name = "pogr_tracing_rs"
 version = "0.0.20"
 edition = "2021"
+readme = "README.md"
+homepage = "https://pogr.io/"
+repository = "https://github.com/Pogr-io/pogr_tracing_rs/"
+license = "MIT"
+keywords = ["gamedev", "analytics", "logging", "statistics"]
+categories = ["gamedev", "development-tools", "analytics", "statistics", "logging", "logger", "game", "unreal", "unity", "godot", "tracing", "appender"]
+authors = ["Bioblaze Payne", "Randolph William Aarseth II <randolph@pogr.io>"]
+rust-version = "1.70"
+description = "pogr_tracing_rs is a Crate to allow log collection from the tracing crate, easy and simple."
+documentation = "https://docs.rs/pogr_tracing_rs"
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -17,3 +31,4 @@ serde_json = "1.0"
 tokio = { version = "1", features = ["full"] }
 mockito = "1.2.0"
 tokio-test = "0.4"
+criterion = { version = "0.4.0", features = ["async"] }
